@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AssetFlow | IT Asset Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <h2 class="brand">▦ AssetFlow</h2>
+    <p class="muted">IT MANAGEMENT</p>
+
+    <button class="nav active" data-page="dashboard">▦ Dashboard</button>
+    <button class="nav" data-page="assets">▣ Computer Assets</button>
+    <button class="nav" data-page="licenses">▤ Software Licenses</button>
+    <button class="nav" data-page="maintenance">⚙ Maintenance</button>
+
+    <div class="sidebar-bottom">
+      <div class="avatar">IT</div>
+      <div><strong>IT Administrator</strong><small>System Manager</small></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="page-title">Dashboard</h1>
+        <p class="muted">Manage your IT infrastructure in one place.</p>
+      </div>
+      <button class="primary" id="header-add">+ Add Asset</button>
+    </header>
+
+    <section id="dashboard" class="page">
+      <div class="welcome">
+        <div>
+          <p class="eyebrow">IT OPERATIONS OVERVIEW</p>
+          <h2>Your IT estate, under control.</h2>
+          <p>Monitor computers, licenses, assignments and service activities.</p>
+        </div>
+        <span class="welcome-icon">▣</span>
+      </div>
+
+      <div class="stats">
+        <article class="stat"><span>Total Computers</span><strong id="total-assets">0</strong><small>Registered devices</small></article>
+        <article class="stat"><span>Allocated Assets</span><strong id="allocated-assets">0</strong><small>Assigned to employees</small></article>
+        <article class="stat"><span>Software Licenses</span><strong id="total-licenses">0</strong><small>Products tracked</small></article>
+        <article class="stat"><span>Open Maintenance</span><strong id="open-maintenance">0</strong><small>Pending or in progress</small></article>
+      </div>
+
+      <div class="columns">
+        <article class="panel">
+          <div class="panel-head"><h3>Recent Computer Assets</h3><button class="text-btn" data-go="assets">View all →</button></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Device</th><th>Assigned To</th><th>Status</th></tr></thead>
+            <tbody id="dashboard-assets"></tbody>
+          </table></div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><h3>Action Required</h3></div>
+          <div id="alerts" class="alerts"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="assets" class="page hidden">
+      <div class="section-head">
+        <div><h2>Computer Assets</h2><p class="muted">Register and manage company devices.</p></div>
+        <button class="primary" data-modal="asset-modal">+ Add Computer</button>
+      </div>
+      <div class="toolbar"><input id="asset-search" placeholder="Search device, employee, serial number..."></div>
+      <div class="panel table-wrap"><table>
+        <thead><tr><th>Asset ID</th><th>Device</th><th>Serial Number</th><th>Assigned To</th><th>Department</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="asset-table"></tbody>
+      </table></div>
+    </section>
+
+    <section id="licenses" class="page hidden">
+      <div class="section-head">
+        <div><h2>Software Licenses</h2><p class="muted">Track subscriptions, seats and expiry dates.</p></div>
+        <button class="primary" data-modal="license-modal">+ Add License</button>
+      </div>
+      <div class="stats compact">
+        <article class="stat"><span>Products</span><strong id="license-products">0</strong></article>
+        <article class="stat"><span>Total Seats</span><strong id="license-seats">0</strong></article>
+        <article class="stat"><span>Available Seats</span><strong id="license-available">0</strong></article>
+      </div>
+      <div class="panel table-wrap"><table>
+        <thead><tr><th>Software</th><th>License Key / Ref.</th><th>Total Seats</th><th>Used Seats</th><th>Expiry Date</th><th>Status</th></tr></thead>
+        <tbody id="license-table"></tbody>
+      </table></div>
+    </section>
+
+    <section id="maintenance" class="page hidden">
+      <div class="section-head">
+        <div><h2>Maintenance Center</h2><p class="muted">Schedule repairs and monitor service history.</p></div>
+        <button class="primary" data-modal="maintenance-modal">+ New Request</button>
+      </div>
+      <div class="panel table-wrap"><table>
+        <thead><tr><th>Ticket</th><th>Asset</th><th>Issue</th><th>Scheduled</th><th>Technician</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="maintenance-table"></tbody>
+      </table></div>
+    </section>
+  </main>
+
+  <!-- Add computer -->
+  <dialog id="asset-modal">
+    <form id="asset-form">
+      <div class="modal-head"><h2>Register Computer</h2><button type="button" class="close" data-close>×</button></div>
+      <label>Device Name<input name="name" required placeholder="Dell Latitude 5450"></label>
+      <label>Serial Number<input name="serial" required></label>
+      <label>Assigned Employee<input name="employee" placeholder="Unassigned"></label>
+      <label>Department<input name="department" placeholder="IT"></label>
+      <label>Device Type<select name="type"><option>Laptop</option><option>Desktop</option><option>Workstation</option><option>Server</option></select></label>
+      <label>Status<select name="status"><option>Available</option><option>Allocated</option><option>In Maintenance</option><option>Retired</option></select></label>
+      <button class="primary full">Save Computer</button>
+    </form>
+  </dialog>
+
+  <!-- Add license -->
+  <dialog id="license-modal">
+    <form id="license-form">
+      <div class="modal-head"><h2>Add Software License</h2><button type="button" class="close" data-close>×</button></div>
+      <label>Software Name<input name="software" required placeholder="Microsoft 365"></label>
+      <label>License Key / Reference<input name="key" required placeholder="Store a reference, not a secret key"></label>
+      <label>Total Seats<input name="total" type="number" min="1" value="10" required></label>
+      <label>Used Seats<input name="used" type="number" min="0" value="0" required></label>
+      <label>Expiry Date<input name="expiry" type="date" required></label>
+      <button class="primary full">Save License</button>
+    </form>
+  </dialog>
+
+  <!-- Add maintenance -->
+  <dialog id="maintenance-modal">
+    <form id="maintenance-form">
+      <div class="modal-head"><h2>New Maintenance Request</h2><button type="button" class="close" data-close>×</button></div>
+      <label>Computer Asset<select id="maintenance-asset" name="assetId" required></select></label>
+      <label>Issue Description<input name="issue" required placeholder="Battery replacement"></label>
+      <label>Scheduled Date<input name="date" type="date" required></label>
+      <label>Technician<input name="technician" placeholder="IT Support"></label>
+      <label>Status<select name="status"><option>Open</option><option>In Progress</option><option>Completed</option></select></label>
+      <button class="primary full">Create Request</button>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
